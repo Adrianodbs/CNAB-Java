@@ -1,5 +1,7 @@
 package br.com.adriano.backend;
 
+import java.math.BigDecimal;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -61,6 +63,23 @@ public class BatchConfig {
             "tipo", "data", "valor", "cpf", "cartao", "hora", "donoDaLoja", "nomeDaLoja")
         .targetType(TransacaoCNAB.class)
         .build();
+  }
+
+  @Bean
+  ItemProcessor<TransacaoCNAB, Transacao> processor() {
+    return item -> {
+      var transacao = new Transacao(
+          null, item.tipo(), null,
+          item.valor().divide(BigDecimal.valueOf(100)),
+          item.cpf(),
+          item.cartao(), null,
+          item.donoDaLoja().trim(),
+          item.nomeDaLoja().trim())
+          .withData(item.data())
+          .withHora(item.hora());
+
+      return transacao;
+    };
   }
 
 }
