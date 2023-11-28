@@ -1,4 +1,4 @@
-package br.com.adriano.backend;
+package br.com.adriano.backend.domain;
 
 import java.math.BigDecimal;
 import java.sql.Date;
